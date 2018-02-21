@@ -43,15 +43,19 @@ namespace XamarinClient
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MainPage : ContentPage
 	{
-        StackLayout stacklayout = new StackLayout();
-        static LabelViewModel textInfo = new LabelViewModel();
-        SampleClient OpcClient = new SampleClient(textInfo);
-        string endpointUrl = null;
+        StackLayout stacklayout;
+        LabelViewModel textInfo;
+        SampleClient OpcClient;
+        string endpointUrl;
    
         public MainPage()
         {
             InitializeComponent();
+            textInfo = new LabelViewModel();
+            OpcClient = new SampleClient(textInfo);
+            stacklayout = new StackLayout();
             BindingContext = textInfo;
+            endpointUrl = null;
         }
 
         async void OnConnect(object sender, EventArgs e)
@@ -65,7 +69,7 @@ namespace XamarinClient
                     bool connectToServer = true;
                     ConnectIndicator.IsRunning = true;
 
-                    await Task.Run(() => OpcClient.CreateCertificate());
+                    await Task.Run(async () => await OpcClient.CreateCertificate());
 
                     if (OpcClient.haveAppCertificate == false)
                     {
@@ -75,7 +79,7 @@ namespace XamarinClient
                     if (connectToServer == true)
                     {
                         var connectionStatus = await Task.Run(() => OpcClient.OpcClient(endpointUrl));
-
+                        
                         if (connectionStatus == SampleClient.ConnectionStatus.Connected)
                         {
                             Tree tree;

@@ -69,7 +69,7 @@ namespace XamarinClient
             config = null;
         }
 
-        public async void CreateCertificate()
+        public async Task CreateCertificate()
         {
             ApplicationInstance application = new ApplicationInstance
             {
@@ -159,7 +159,7 @@ namespace XamarinClient
                 // register keep alive handler
                 session.KeepAlive += Client_KeepAlive;
             }
-            catch 
+            catch
             {
                 connectionStatus = ConnectionStatus.Error;
             }
